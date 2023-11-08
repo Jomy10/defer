@@ -1,3 +1,5 @@
+// This example works on both a C or C++ compiler
+
 #include <stdlib.h>
 #include <stdio.h>
 #define DEFER_IMPL
@@ -9,9 +11,9 @@ struct my_struct {
 };
 
 struct my_struct* create_my_struct() {
-  struct my_struct* s = malloc(sizeof(struct my_struct));
-  s->a = malloc(sizeof(int));
-  s->b = malloc(sizeof(int));
+  struct my_struct* s = (struct my_struct*) malloc(sizeof(struct my_struct));
+  s->a = (int*) malloc(sizeof(int));
+  s->b = (int*) malloc(sizeof(int));
   return s;
 }
 
@@ -22,7 +24,7 @@ void destroy_my_struct(struct my_struct* s) {
 }
 
 int main() {
-  autofree int* i = malloc(sizeof(int));
+  autofree int* i = (int*) malloc(sizeof(int));
   struct my_struct* s = create_my_struct();
   defer({
     destroy_my_struct(s);

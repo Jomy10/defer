@@ -1,6 +1,6 @@
 # defer.h
 
-A simple, stb-style single-header library which adds a defer block and an autofree attribute to C/C++.
+A simple, stb-style single-header library which adds a compile-time defer block and autofree attribute to C/C++.
 
 ## Autofree
 
