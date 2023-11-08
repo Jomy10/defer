@@ -104,12 +104,12 @@ extern "C" {
 	#error "Compiler not compatible with defer library"
 #endif
 
-DEFERDEF void do_defer(defer_block* ptr);
-DEFERDEF void autofree_var(void* ptr);
+DEFERDEF inline void do_defer(defer_block* ptr);
+DEFERDEF inline void autofree_var(void* ptr);
 
 #ifdef DEFER_IMPL
 // defer
-DEFERDEF void do_defer(defer_block* ptr) {
+DEFERDEF inline void do_defer(defer_block* ptr) {
 	(*ptr)();
 }
 
@@ -117,7 +117,7 @@ DEFERDEF void do_defer(defer_block* ptr) {
 #include <stdlib.h>
 
 // autofree
-DEFERDEF void autofree_var(void* ptr) {
+DEFERDEF inline void autofree_var(void* ptr) {
 	free(*(void**)ptr);
 }
 #endif // DEFER_NO_AUTOFREE_IMPL
