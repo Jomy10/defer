@@ -83,6 +83,12 @@
 #define _DEFER_CONCAT_IMPL(a, b) a##b
 #define _DEFER_CONCAT(a, b) _DEFER_CONCAT_IMPL(a, b)
 
+#ifdef DEFER_PREFIX
+#define _DEFER_PREFIX(b) _DEFER_CONCAT(DEFER_PREFIX, b)
+#else
+#define _DEFER_PREFIX(b) b
+#endif
+
 #define autofree __attribute__((cleanup(autofree_var)))
 
 #ifdef __cplusplus
@@ -104,12 +110,12 @@ extern "C" {
 	#error "Compiler not compatible with defer library"
 #endif
 
-DEFERDEF inline void do_defer(defer_block* ptr);
-DEFERDEF inline void autofree_var(void* ptr);
+DEFERDEF inline void _DEFER_PREFIX(do_defer)(defer_block* ptr);
+DEFERDEF inline void _DEFER_PREFIX(autofree_var)(void* ptr);
 
 #ifdef DEFER_IMPL
 // defer
-DEFERDEF inline void do_defer(defer_block* ptr) {
+DEFERDEF inline void _DEFER_PREFIX(do_defer)(defer_block* ptr) {
 	(*ptr)();
 }
 
@@ -117,7 +123,7 @@ DEFERDEF inline void do_defer(defer_block* ptr) {
 #include <stdlib.h>
 
 // autofree
-DEFERDEF inline void autofree_var(void* ptr) {
+DEFERDEF inline void _DEFER_PREFIX(autofree_var)(void* ptr) {
 	free(*(void**)ptr);
 }
 #endif // DEFER_NO_AUTOFREE_IMPL

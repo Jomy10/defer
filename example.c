@@ -36,5 +36,3 @@ int main() {
   return 0;
 }
 
-// TODO: make a build script for the example
-
