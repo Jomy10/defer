@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #define DEFER_IMPL
+#define DEFER_PREFIX _test_
 #include "defer.h"
 
 struct my_struct {

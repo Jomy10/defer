@@ -89,7 +89,7 @@
 #define _DEFER_PREFIX(b) b
 #endif
 
-#define autofree __attribute__((cleanup(autofree_var)))
+#define autofree __attribute__((cleanup(_DEFER_PREFIX(autofree_var))))
 
 #ifdef __cplusplus
 extern "C" {
@@ -100,12 +100,12 @@ extern "C" {
     // GCC/ICC
     typedef void (*defer_block)(void);
     #define defer_block_create(body) ({ void __fn__(void) body; __fn__; })
-    #define defer(body) defer_block __attribute__((unused)) __attribute((cleanup(do_defer))) _DEFER_CONCAT(__defer, __COUNTER__) = defer_block_create(body)
+    #define defer(body) defer_block __attribute__((unused)) __attribute((cleanup(_DEFER_PREFIX(do_defer)))) _DEFER_CONCAT(__defer, __COUNTER__) = defer_block_create(body)
 #elif defined(__clang__)
     // Clang/zig cc
     typedef void (^defer_block)(void);
     #define defer_block_create(body) ^body
-    #define defer(body) defer_block __attribute__((unused)) __attribute__((cleanup(do_defer))) _DEFER_CONCAT(__defer, __COUNTER__) = defer_block_create(body)
+    #define defer(body) defer_block __attribute__((unused)) __attribute__((cleanup(_DEFER_PREFIX(do_defer)))) _DEFER_CONCAT(__defer, __COUNTER__) = defer_block_create(body)
 #else
 	#error "Compiler not compatible with defer library"
 #endif
